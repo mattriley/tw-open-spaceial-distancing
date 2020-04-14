@@ -15,12 +15,11 @@ module.exports = (office, startColIndex = 0) => {
         });
     });
 
-    const width = office[0].length;
-    const height = office.length;
     const startRowIndex = office.length - 1;
     const endRowIndex = 0;
 
     const isExitRow = rowIndex => rowIndex === endRowIndex;
+    const offsets = [{ rowIndexOffset: -1 }, { rowIndexOffset: 1 }, { colIndexOffset: -1 }, { colIndexOffset: 1 }];
 
     const findExit = (rowIndex, colIndex) => {
         const desk = officeData[rowIndex][colIndex];
@@ -28,22 +27,14 @@ module.exports = (office, startColIndex = 0) => {
         if (desk.unsafe || desk.visited) return false;
         desk.visited = true;
 
-        const funcs = [
-            () => {
-                if (rowIndex != 0) return findExit(rowIndex - 1, colIndex);
-            },
-            () => {
-                if (rowIndex !== height - 1) return findExit(rowIndex + 1, colIndex);
-            },
-            () => {
-                if (colIndex !== 0) return findExit(rowIndex, colIndex - 1);
-            },
-            () => {
-                if (colIndex !== width - 1) return findExit(rowIndex, colIndex + 1);
-            }
-        ];
-
-        return funcs.find(func => func());
+        return offsets.find(offset => {
+            const defaults = { rowIndexOffset: 0, colIndexOffset: 0 };
+            const { rowIndexOffset, colIndexOffset } = { ...defaults, ...offset };
+            const nextRowIndex = rowIndex + rowIndexOffset;
+            const nextColIndex = colIndex + colIndexOffset;
+            const nextDesk = officeData[nextRowIndex] && officeData[nextRowIndex][nextColIndex];
+            return nextDesk ? findExit(nextRowIndex, nextColIndex) : false;
+        });
     };
 
     return findExit(startRowIndex, startColIndex);
