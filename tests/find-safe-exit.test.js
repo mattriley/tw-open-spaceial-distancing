@@ -46,3 +46,14 @@ test('Safe exit found using right adjacent column', t => {
     const safeExitFound = findSafeExit(office);
     t.true(safeExitFound);
 });
+
+test('Safe exit found using left adjacent column', t => {
+    t.plan(1);
+    const row1 = [0, 1];
+    const row2 = [0, 1];
+    const row3 = [0, 0];
+    const office = [row1, row2, row3];
+    const startCol = 2;
+    const safeExitFound = findSafeExit(office, startCol);
+    t.true(safeExitFound);
+});

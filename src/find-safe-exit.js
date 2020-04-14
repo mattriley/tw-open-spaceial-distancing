@@ -1,6 +1,6 @@
 const drawOffice = require('./draw-office');
 
-module.exports = office => {
+module.exports = (office, startCol = 1) => {
     if (!office.length) {
         throw new Error('Office without desks');
     }
@@ -10,7 +10,7 @@ module.exports = office => {
     const isEdge = (row, col) => valueAt(row, col) == undefined;
 
     let currentRow = office.length;
-    let currentCol = 1;
+    let currentCol = startCol;
 
     while (currentRow > 1) {
         // console.log(drawOffice(office, { row: currentRow, col: currentCol }));
@@ -19,15 +19,22 @@ module.exports = office => {
         const nextCol = currentCol;
         const nextRowBlocked = isBlocked(nextRow, nextCol);
         if (nextRowBlocked) {
-            const nextCol = currentCol + 1;
-            const nextColExists = !isEdge(nextRow, nextCol);
-            if (nextColExists) {
+            const rightCol = currentCol + 1;
+            const rightColExists = !isEdge(currentRow, rightCol);
+            if (rightColExists) {
                 currentCol++;
             } else {
-                return false;
+                const leftCol = currentCol - 1;
+                const leftColExists = !isEdge(currentRow, leftCol);
+                if (leftColExists) {
+                    currentCol--;
+                } else {
+                    return false;
+                }
             }
+        } else {
+            currentRow--;
         }
-        currentRow--;
     }
 
     return true;
