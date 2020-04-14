@@ -29,9 +29,9 @@ test('Safe exit reached when only 1 column of empty desks', t => {
 
 test('Safe exit blocked when only 1 column of empty desks', t => {
     t.plan(1);
-    const row1 = [0];
+    const row1 = [1]; // blocked
     const row2 = [0];
-    const row3 = [1]; // blocked
+    const row3 = [0];
     const office = [row1, row2, row3];
     const safeExitFound = findSafeExit(office);
     t.false(safeExitFound);
