@@ -1,4 +1,5 @@
 const test = require('tape');
+const findSafeExit = require('../src/find-safe-exit');
 
 test('Office without desks is not a valid scenario', t => {
     t.plan(1);
@@ -35,16 +36,3 @@ test('Safe exit blocked when only 1 column of empty desks', t => {
     const safeExitFound = findSafeExit(office);
     t.false(safeExitFound);
 });
-
-const findSafeExit = office => {
-    if (!office.length) {
-        throw new Error('Office without desks');
-    }
-
-    let row = office.length - 1;
-    while (row > 0) {
-        if (office[row][0]) return false;
-        row--;
-    }
-    return true;
-};
