@@ -26,12 +26,25 @@ test('Safe exit reached when only 1 column of empty desks', t => {
     t.true(safeExitFound);
 });
 
+test('Safe exit blocked when only 1 column of empty desks', t => {
+    t.plan(1);
+    const row0 = [0];
+    const row1 = [0];
+    const row2 = [1]; // blocked
+    const office = [row0, row1, row2];
+    const safeExitFound = findSafeExit(office);
+    t.false(safeExitFound);
+});
+
 const findSafeExit = office => {
     if (!office.length) {
         throw new Error('Office without desks');
     }
 
-    let y = office.length - 1;
-    while (y > 0) y--;
+    let row = office.length - 1;
+    while (row > 0) {
+        if (office[row][0]) return false;
+        row--;
+    }
     return true;
 };
