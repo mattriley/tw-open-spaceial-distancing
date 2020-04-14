@@ -36,3 +36,13 @@ test('Safe exit blocked when only 1 column of empty desks', t => {
     const safeExitFound = findSafeExit(office);
     t.false(safeExitFound);
 });
+
+test('Safe exit found using right adjacent column', t => {
+    t.plan(1);
+    const row1 = [1, 0];
+    const row2 = [1, 0];
+    const row3 = [0, 0];
+    const office = [row1, row2, row3];
+    const safeExitFound = findSafeExit(office);
+    t.true(safeExitFound);
+});
