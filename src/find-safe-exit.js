@@ -11,6 +11,7 @@ module.exports = (office, startCol = 1) => {
 
     let currentRow = office.length;
     let currentCol = startCol;
+    let currentDir = 'U';
 
     while (currentRow > 1) {
         // console.log(drawOffice(office, { row: currentRow, col: currentCol }));
@@ -19,21 +20,30 @@ module.exports = (office, startCol = 1) => {
         const nextCol = currentCol;
         const nextRowBlocked = isBlocked(nextRow, nextCol);
         if (nextRowBlocked) {
-            const rightCol = currentCol + 1;
-            const rightColExists = !isEdge(currentRow, rightCol);
-            if (rightColExists) {
-                currentCol++;
-            } else {
+            if (currentDir == 'U' || currentDir == 'R') {
+                const rightCol = currentCol + 1;
+                const rightColExists = !isEdge(currentRow, rightCol);
+                if (rightColExists) {
+                    currentCol++;
+                    currentDir = 'R';
+                } else {
+                    currentDir = 'L';
+                }
+            }
+
+            if (currentDir == 'L') {
                 const leftCol = currentCol - 1;
                 const leftColExists = !isEdge(currentRow, leftCol);
                 if (leftColExists) {
                     currentCol--;
+                    currentDir = 'L';
                 } else {
                     return false;
                 }
             }
         } else {
             currentRow--;
+            currentDir = 'U';
         }
     }
 
