@@ -4,8 +4,12 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "tape tests/**/*.js | tap-spec"
     },
     "author": "Matt Riley",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "tap-spec": "^5.0.0",
+        "tape": "^4.13.2"
+    }
 }
