@@ -1,51 +1,50 @@
 const drawOffice = require('./draw-office');
 
-module.exports = (office, startCol = 1) => {
+module.exports = (office, startColIndex = 0) => {
     if (!office.length) {
         throw new Error('Office without desks');
     }
 
-    const valueAt = (row, col) => office[row - 1][col - 1];
-    const isBlocked = (row, col) => !!valueAt(row, col);
-    const isEdge = (row, col) => valueAt(row, col) == undefined;
+    const officeData = office.map(row => {
+        return row.map(desk => {
+            return {
+                safe: desk == 0,
+                unsafe: desk == 1,
+                visited: false
+            };
+        });
+    });
 
-    let currentRow = office.length;
-    let currentCol = startCol;
-    let currentDir = 'U';
+    const width = office[0].length;
+    const height = office.length;
+    const startRowIndex = office.length - 1;
+    const endRowIndex = 0;
 
-    while (currentRow > 1) {
-        // console.log(drawOffice(office, { row: currentRow, col: currentCol }));
+    const isExitRow = rowIndex => rowIndex === endRowIndex;
 
-        const nextRow = currentRow - 1;
-        const nextCol = currentCol;
-        const nextRowBlocked = isBlocked(nextRow, nextCol);
-        if (nextRowBlocked) {
-            if (currentDir == 'U' || currentDir == 'R') {
-                const rightCol = currentCol + 1;
-                const rightColExists = !isEdge(currentRow, rightCol);
-                if (rightColExists) {
-                    currentCol++;
-                    currentDir = 'R';
-                } else {
-                    currentDir = 'L';
-                }
+    const findExit = (rowIndex, colIndex) => {
+        const desk = officeData[rowIndex][colIndex];
+        if (desk.safe && isExitRow(rowIndex)) return true;
+        if (desk.unsafe || desk.visited) return false;
+        desk.visited = true;
+
+        const funcs = [
+            () => {
+                if (rowIndex != 0) return findExit(rowIndex - 1, colIndex);
+            },
+            () => {
+                if (rowIndex !== height - 1) return findExit(rowIndex + 1, colIndex);
+            },
+            () => {
+                if (colIndex !== 0) return findExit(rowIndex, colIndex - 1);
+            },
+            () => {
+                if (colIndex !== width - 1) return findExit(rowIndex, colIndex + 1);
             }
+        ];
 
-            if (currentDir == 'L') {
-                const leftCol = currentCol - 1;
-                const leftColExists = !isEdge(currentRow, leftCol);
-                if (leftColExists) {
-                    currentCol--;
-                    currentDir = 'L';
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            currentRow--;
-            currentDir = 'U';
-        }
-    }
+        return funcs.find(func => func());
+    };
 
-    return true;
+    return findExit(startRowIndex, startColIndex);
 };

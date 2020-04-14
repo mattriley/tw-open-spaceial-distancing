@@ -53,8 +53,8 @@ test('Safe exit found using left adjacent column', t => {
     const row2 = [0, 1];
     const row3 = [0, 0];
     const office = [row1, row2, row3];
-    const startCol = 2;
-    const safeExitFound = findSafeExit(office, startCol);
+    const startColIndex = 1;
+    const safeExitFound = findSafeExit(office, startColIndex);
     t.true(safeExitFound);
 });
 
@@ -65,6 +65,18 @@ test('Safe exit found requiring moving both left and right', t => {
     const row3 = [1, 1, 0];
     const row4 = [0, 0, 0];
     const office = [row1, row2, row3, row4];
+    const safeExitFound = findSafeExit(office);
+    t.true(safeExitFound);
+});
+
+test('Safe exit found requiring moving both left and right, and down', t => {
+    t.plan(1);
+    const row1 = [1, 1, 1, 0, 1];
+    const row2 = [1, 1, 1, 0, 0];
+    const row3 = [0, 0, 0, 1, 0];
+    const row4 = [0, 1, 0, 1, 0];
+    const row5 = [0, 1, 0, 0, 0];
+    const office = [row1, row2, row3, row4, row5];
     const safeExitFound = findSafeExit(office);
     t.true(safeExitFound);
 });
