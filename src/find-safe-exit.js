@@ -5,6 +5,10 @@ module.exports = office => {
         throw new Error('Office without desks');
     }
 
+    const valueAt = (row, col) => office[row - 1][col - 1];
+    const isBlocked = (row, col) => !!valueAt(row, col);
+    const isEdge = (row, col) => valueAt(row, col) == undefined;
+
     let currentRow = office.length;
     let currentCol = 1;
 
@@ -13,10 +17,10 @@ module.exports = office => {
 
         const nextRow = currentRow - 1;
         const nextCol = currentCol;
-        const nextRowBlocked = office[nextRow - 1][nextCol - 1];
+        const nextRowBlocked = isBlocked(nextRow, nextCol);
         if (nextRowBlocked) {
             const nextCol = currentCol + 1;
-            const nextColExists = office[nextRow - 1][nextCol - 1] !== undefined;
+            const nextColExists = !isEdge(nextRow, nextCol);
             if (nextColExists) {
                 currentCol++;
             } else {
