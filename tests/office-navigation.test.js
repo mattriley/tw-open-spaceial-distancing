@@ -5,8 +5,8 @@ test('Already at exit when only 1 desk', t => {
     t.plan(1);
     const row1 = [0];
     const office = [row1];
-    const safeExitFound = navigateOffice(office);
-    t.true(safeExitFound);
+    const exitFound = navigateOffice(office);
+    t.true(exitFound);
 });
 
 test('Exit reached when only 1 column of empty desks', t => {
@@ -15,8 +15,8 @@ test('Exit reached when only 1 column of empty desks', t => {
     const row2 = [0];
     const row3 = [0];
     const office = [row1, row2, row3];
-    const safeExitFound = navigateOffice(office);
-    t.true(safeExitFound);
+    const exitFound = navigateOffice(office);
+    t.true(exitFound);
 });
 
 test('Exit blocked when only 1 column of empty desks', t => {
@@ -25,8 +25,8 @@ test('Exit blocked when only 1 column of empty desks', t => {
     const row2 = [0];
     const row3 = [0];
     const office = [row1, row2, row3];
-    const safeExitFound = navigateOffice(office);
-    t.false(safeExitFound);
+    const exitFound = navigateOffice(office);
+    t.false(exitFound);
 });
 
 test('Exit found using right adjacent column', t => {
@@ -35,8 +35,8 @@ test('Exit found using right adjacent column', t => {
     const row2 = [1, 0];
     const row3 = [0, 0];
     const office = [row1, row2, row3];
-    const safeExitFound = navigateOffice(office);
-    t.true(safeExitFound);
+    const exitFound = navigateOffice(office);
+    t.true(exitFound);
 });
 
 test('Exit found using left adjacent column', t => {
@@ -46,8 +46,8 @@ test('Exit found using left adjacent column', t => {
     const row3 = [0, 0];
     const office = [row1, row2, row3];
     const startColIndex = 1;
-    const safeExitFound = navigateOffice(office, startColIndex);
-    t.true(safeExitFound);
+    const exitFound = navigateOffice(office, startColIndex);
+    t.true(exitFound);
 });
 
 test('Exit found requiring moving both left and right', t => {
@@ -57,8 +57,8 @@ test('Exit found requiring moving both left and right', t => {
     const row3 = [1, 1, 0];
     const row4 = [0, 0, 0];
     const office = [row1, row2, row3, row4];
-    const safeExitFound = navigateOffice(office);
-    t.true(safeExitFound);
+    const exitFound = navigateOffice(office);
+    t.true(exitFound);
 });
 
 test('Exit found requiring moving both left and right, and down', t => {
@@ -69,6 +69,6 @@ test('Exit found requiring moving both left and right, and down', t => {
     const row4 = [0, 1, 0, 1, 0];
     const row5 = [0, 1, 0, 0, 0];
     const office = [row1, row2, row3, row4, row5];
-    const safeExitFound = navigateOffice(office);
-    t.true(safeExitFound);
+    const exitFound = navigateOffice(office);
+    t.true(exitFound);
 });
