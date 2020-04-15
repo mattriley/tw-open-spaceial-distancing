@@ -2,12 +2,15 @@
 
 const generateOffice = require('./src/generate-office');
 const navigateOffice = require('./src/navigate-office');
-const allocateRandomly = require('./src/desk-allocators/random');
+const randomly = require('./src/desk-allocators/random');
 const toFixed = require('./src/to-fixed');
 
-const generateOfficeRandomly = generateOffice(allocateRandomly);
+const totalRows = 10;
+const desksPerRow = 10;
 const repeat = 10000;
 const step = 0.1;
+
+const generateOfficeRandomly = generateOffice({ totalRows, desksPerRow, allocateDesks: randomly });
 
 console.log(`Number of samples for each p: ${repeat}`);
 

@@ -1,38 +1,44 @@
 const test = require('tape');
 const deskStatus = require('../src/desk-status');
 const generateOffice = require('../src/generate-office');
-const allocateSequentially = require('../src/desk-allocators/sequential');
-const allocateRandomly = require('../src/desk-allocators/random');
 
-const generateOfficeSequentially = generateOffice(allocateSequentially);
-const generateOfficeRandomly = generateOffice(allocateRandomly);
+const totalRows = 2;
+const desksPerRow = 5;
 
 test('Office is unoccupied', t => {
-    t.plan(1);
+    t.plan(3);
     const p = 0;
-    const office = generateOfficeSequentially(p);
+    const allocateDesks = (totalDesks, quota) => {
+        t.equal(totalDesks, 10);
+        t.equal(quota, 0);
+        return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    };
+    const office = generateOffice({ totalRows, desksPerRow, allocateDesks })(p);
     assertOccupied(t, office, 0);
 });
 
-test('Office is 10% occupied', t => {
-    t.plan(1);
-    const p = 0.1;
-    const office = generateOfficeSequentially(p);
-    assertOccupied(t, office, 10);
+test('Office is half occupied', t => {
+    t.plan(3);
+    const p = 0.5;
+    const allocateDesks = (totalDesks, quota) => {
+        t.equal(totalDesks, 10);
+        t.equal(quota, 5);
+        return [1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+    };
+    const office = generateOffice({ totalRows, desksPerRow, allocateDesks })(p);
+    assertOccupied(t, office, 5);
 });
 
 test('Office is fully occupied', t => {
-    t.plan(1);
+    t.plan(3);
     const p = 1;
-    const office = generateOfficeSequentially(p);
-    assertOccupied(t, office, 100);
-});
-
-test('Office is 50% randomly occupied using Fisher-Yates shuffle (impure)', t => {
-    t.plan(1);
-    const p = 0.5;
-    const office = generateOfficeRandomly(p);
-    assertOccupied(t, office, 50);
+    const allocateDesks = (totalDesks, quota) => {
+        t.equal(totalDesks, 10);
+        t.equal(quota, 10);
+        return [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    };
+    const office = generateOffice({ totalRows, desksPerRow, allocateDesks })(p);
+    assertOccupied(t, office, 10);
 });
 
 const assertOccupied = (t, office, expectedDesks) => {
