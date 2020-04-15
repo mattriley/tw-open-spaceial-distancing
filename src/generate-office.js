@@ -1,6 +1,7 @@
-const rows = 10;
+const deskStatus = require('./desk-status');
+const totalRows = 10;
 const desksPerRow = 10;
-const totalDesks = rows * desksPerRow;
+const totalDesks = totalRows * desksPerRow;
 
 module.exports = (p, rand) => {
     const allocateDesk = maxExclusive => Math.floor(rand * maxExclusive);
@@ -12,8 +13,8 @@ module.exports = (p, rand) => {
         return unoccupiedDesks.splice(deskIndex, 1);
     });
 
-    const desks = new Array(totalDesks).fill(0);
-    occupiedDesks.forEach(i => (desks[i] = 1));
-    const office = Array.from({ length: rows }, (_, rowIndex) => desks.slice(rowIndex * desksPerRow, rowIndex + desksPerRow));
+    const desks = new Array(totalDesks).fill(deskStatus.unoccupied);
+    occupiedDesks.forEach(i => (desks[i] = deskStatus.occupied));
+    const office = Array.from({ length: totalRows }, (_, rowIndex) => desks.slice(rowIndex * desksPerRow, rowIndex + desksPerRow));
     return office;
 };
