@@ -1,8 +1,8 @@
 const deskStatus = require('./desk-status');
 
-module.exports = ({ totalRows, desksPerRow, allocateDesks }) => p => {
+module.exports = ({ totalRows, desksPerRow, allocateDesks }) => percentAsDecimal => {
     const totalDesks = totalRows * desksPerRow;
-    const quota = Math.floor(totalDesks * p);
+    const quota = Math.floor(totalDesks * percentAsDecimal);
     const desks = allocateDesks(totalDesks, quota);
     const chunk = rowIndex => desks.slice(rowIndex * desksPerRow, rowIndex * desksPerRow + desksPerRow);
     const office = Array.from({ length: totalRows }, (_, rowIndex) => chunk(rowIndex));
