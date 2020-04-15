@@ -2,10 +2,10 @@
 
 const generateOffice = require('./src/generate-office');
 const navigateOffice = require('./src/navigate-office');
-const shuffle = require('./src/fisher-yates-shuffle');
+const allocateRandomly = require('./src/desk-allocators/random');
 const toFixed = require('./src/to-fixed');
 
-const generateOfficeRandomly = generateOffice(shuffle);
+const generateOfficeRandomly = generateOffice(allocateRandomly);
 const repeat = 10000;
 const step = 0.1;
 

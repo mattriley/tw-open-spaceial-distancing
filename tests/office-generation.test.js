@@ -1,28 +1,30 @@
 const test = require('tape');
 const deskStatus = require('../src/desk-status');
 const generateOffice = require('../src/generate-office');
-const shuffle = require('./../src/fisher-yates-shuffle'); // impure
-const generateOfficeRandomly = generateOffice(shuffle);
-const generateOfficeNonRandomly = generateOffice(arr => arr);
+const allocateSequentially = require('../src/desk-allocators/sequential');
+const allocateRandomly = require('../src/desk-allocators/random');
+
+const generateOfficeSequentially = generateOffice(allocateSequentially);
+const generateOfficeRandomly = generateOffice(allocateRandomly);
 
 test('Office is unoccupied', t => {
     t.plan(1);
     const p = 0;
-    const office = generateOfficeNonRandomly(p);
+    const office = generateOfficeSequentially(p);
     assertOccupied(t, office, 0);
 });
 
 test('Office is 10% occupied', t => {
     t.plan(1);
     const p = 0.1;
-    const office = generateOfficeNonRandomly(p);
+    const office = generateOfficeSequentially(p);
     assertOccupied(t, office, 10);
 });
 
 test('Office is fully occupied', t => {
     t.plan(1);
     const p = 1;
-    const office = generateOfficeNonRandomly(p);
+    const office = generateOfficeSequentially(p);
     assertOccupied(t, office, 100);
 });
 
