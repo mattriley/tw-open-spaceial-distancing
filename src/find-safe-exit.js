@@ -1,41 +1,36 @@
 const drawOffice = require('./draw-office');
 
-module.exports = (office, startColIndex = 0) => {
+const status = {
+    unoccupied: 0,
+    occupied: 1,
+    visited: 2
+};
+
+module.exports = (office, startCol = 0) => {
     if (!office.length) {
         throw new Error('Office without desks');
     }
 
-    const officeData = office.map(row => {
-        return row.map(desk => {
-            return {
-                safe: desk == 0,
-                unsafe: desk == 1,
-                visited: false
-            };
-        });
-    });
+    const startRow = office.length - 1;
+    const exitRow = 0;
 
-    const startRowIndex = office.length - 1;
-    const endRowIndex = 0;
-
-    const isExitRow = rowIndex => rowIndex === endRowIndex;
     const offsets = [{ rowIndexOffset: -1 }, { rowIndexOffset: 1 }, { colIndexOffset: -1 }, { colIndexOffset: 1 }];
 
-    const findExit = (rowIndex, colIndex) => {
-        const desk = officeData[rowIndex][colIndex];
-        if (desk.safe && isExitRow(rowIndex)) return true;
-        if (desk.unsafe || desk.visited) return false;
-        desk.visited = true;
+    const findExit = (row, col) => {
+        const desk = office[row][col];
+        if (desk == status.unoccupied && row == exitRow) return true;
+        if (desk == status.occupied || desk == status.visited) return false;
+        office[row][col] = 2;
 
         return offsets.find(offset => {
             const defaults = { rowIndexOffset: 0, colIndexOffset: 0 };
             const { rowIndexOffset, colIndexOffset } = { ...defaults, ...offset };
-            const nextRowIndex = rowIndex + rowIndexOffset;
-            const nextColIndex = colIndex + colIndexOffset;
-            const nextDesk = officeData[nextRowIndex] && officeData[nextRowIndex][nextColIndex];
-            return nextDesk ? findExit(nextRowIndex, nextColIndex) : false;
+            const nextRowIndex = row + rowIndexOffset;
+            const nextColIndex = col + colIndexOffset;
+            const nextDesk = office[nextRowIndex] && office[nextRowIndex][nextColIndex];
+            return nextDesk !== undefined ? findExit(nextRowIndex, nextColIndex) : false;
         });
     };
 
-    return findExit(startRowIndex, startColIndex);
+    return findExit(startRow, startCol);
 };
