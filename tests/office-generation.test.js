@@ -24,3 +24,11 @@ test('office with p value of 0.1 has 10% of desks randomly occupied', t => {
     const occupied = office.reduce((sum, row) => sum + row.filter(desk => desk == 1).length, 0);
     t.equal(occupied, 10);
 });
+
+test('office with p value of 1 has 100% of desks randomly occupied', t => {
+    t.plan(1);
+    const p = 1;
+    const office = generateOffice(p, Math.random);
+    const occupied = office.reduce((sum, row) => sum + row.filter(desk => desk == 1).length, 0);
+    t.equal(occupied, 100);
+});

@@ -4,7 +4,7 @@ const desksPerRow = 10;
 const totalDesks = totalRows * desksPerRow;
 
 module.exports = (p, rand) => {
-    const allocateDesk = maxExclusive => Math.floor(rand * maxExclusive);
+    const allocateDesk = maxExclusive => Math.floor(rand() * maxExclusive);
     const quota = totalDesks * p;
 
     let unoccupiedDesks = Array.from({ length: totalDesks }, (_, i) => i);
@@ -15,6 +15,13 @@ module.exports = (p, rand) => {
 
     const desks = new Array(totalDesks).fill(deskStatus.unoccupied);
     occupiedDesks.forEach(i => (desks[i] = deskStatus.occupied));
-    const office = Array.from({ length: totalRows }, (_, rowIndex) => desks.slice(rowIndex * desksPerRow, rowIndex + desksPerRow));
+
+    const office = [];
+
+    for (let i = 0; i < 100; i += 10) {
+        const row = desks.slice(i, i + 10);
+        office.push(row);
+    }
+
     return office;
 };
