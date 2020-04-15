@@ -3,7 +3,7 @@
 const generateOffice = require('./src/generate-office');
 const navigateOffice = require('./src/navigate-office');
 const randomly = require('./src/desk-allocators/random');
-const toFixed = require('./src/to-fixed');
+const toFixed = require('./src/lib/to-fixed');
 
 const totalRows = 10;
 const desksPerRow = 10;
