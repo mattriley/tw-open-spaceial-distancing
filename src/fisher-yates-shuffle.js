@@ -7,3 +7,4 @@ module.exports = a => {
 };
 
 // Modified copy of "Fisher-Yates Shuffle" from: https://stackoverflow.com/a/6274381
+// This function is impure because it depends on Math.random.

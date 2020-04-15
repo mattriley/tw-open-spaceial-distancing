@@ -1,10 +1,9 @@
 const deskStatus = require('./desk-status');
-const shuffleArray = require('./shuffle-array');
 const totalRows = 10;
 const desksPerRow = 10;
 const totalDesks = totalRows * desksPerRow;
 
-module.exports = (p, shuffle = shuffleArray) => {
+module.exports = shuffle => p => {
     const quota = Math.floor(totalDesks * p);
     const occupied = new Array(quota).fill(deskStatus.occupied);
     const unoccupied = new Array(totalDesks - quota).fill(deskStatus.unoccupied);
