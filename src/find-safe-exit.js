@@ -1,36 +1,33 @@
-const drawOffice = require('./draw-office');
-
+const exitRow = 0;
 const unoccupied = 0;
 const occupied = 1;
 const visited = 2;
+const offsets = [-1, 1];
 
 module.exports = (office, startCol = 0) => {
     if (!office.length) {
         throw new Error('Office without desks');
     }
 
-    const startRow = office.length - 1;
-    const exitRow = 0;
+    const deskExists = desk => office[desk.row] && office[desk.row][desk.col] !== undefined;
 
-    const findExit = (row, col) => {
+    const findExit = pos => {
+        const { row, col } = pos;
         const desk = office[row][col];
         if (desk == unoccupied && row == exitRow) return true;
         if (desk == occupied || desk == visited) return false;
         office[row][col] = visited;
 
-        const surroundings = [row, col].flatMap((num, i) => {
-            return [1, -1].reduce((acc, offset) => {
-                const pos = [row, col];
-                pos[i] = num + offset;
-                const nextRow = pos[0];
-                const nextCol = pos[1];
-                const nextDesk = office[nextRow] && office[nextRow][nextCol];
-                return nextDesk !== undefined ? acc.concat([pos]) : acc;
+        const surroundings = Object.entries(pos).flatMap(([key, val]) => {
+            return offsets.reduce((acc, offset) => {
+                const nextDesk = { row, col, [key]: val + offset };
+                return deskExists(nextDesk) ? acc.concat(nextDesk) : acc;
             }, []);
         });
 
-        return surroundings.find(pos => findExit(...pos));
+        return surroundings.find(findExit);
     };
 
-    return findExit(startRow, startCol);
+    const startRow = office.length - 1;
+    return findExit({ row: startRow, col: startCol });
 };
