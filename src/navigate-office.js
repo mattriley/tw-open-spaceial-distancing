@@ -13,7 +13,7 @@ module.exports = office => {
 const navigateOffice = (office, pos) => {
     const { row, col } = pos;
     const desk = office[row] && office[row][col];
-    if (desk == undefined || desk == deskStatus.occupied) return false;
+    if (desk == deskStatus.void || desk == deskStatus.occupied) return false;
     if (desk == deskStatus.unoccupied && row == exitRow) return true;
     delete office[row][col];
     const applyOffset = (key, val, offset) => ({ row, col, [key]: val + offset });
