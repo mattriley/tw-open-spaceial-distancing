@@ -12,7 +12,7 @@ console.log(`Number of samples for each p: ${repeat}`);
 for (let p = 1; p >= 0; p -= step) {
     let exitCount = 0;
     for (let i = 0; i <= repeat; i++) {
-        const office = generateOffice(p, Math.random);
+        const office = generateOffice(p);
         const exitFound = navigateOffice(office);
         if (exitFound) exitCount++;
     }

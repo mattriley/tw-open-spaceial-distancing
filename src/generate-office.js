@@ -4,7 +4,7 @@ const totalRows = 10;
 const desksPerRow = 10;
 const totalDesks = totalRows * desksPerRow;
 
-module.exports = (p, rand) => {
+module.exports = (p, rand = Math.random) => {
     const quota = Math.floor(totalDesks * p);
     const occupied = new Array(quota).fill(deskStatus.occupied);
     const unoccupied = new Array(totalDesks - quota).fill(deskStatus.unoccupied);
