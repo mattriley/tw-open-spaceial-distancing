@@ -1,5 +1,4 @@
 const test = require('tape');
-const deskStatus = require('../src/desk-status');
 const generateOffice = require('../src/generate-office');
 
 const totalRows = 2;
@@ -14,7 +13,10 @@ test('Office is unoccupied', t => {
         return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     };
     const office = generateOffice({ totalRows, desksPerRow, allocateDesks })(p);
-    assertOccupied(t, office, 0);
+    t.deepEqual(office, [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+    ]);
 });
 
 test('Office is half occupied', t => {
@@ -26,7 +28,10 @@ test('Office is half occupied', t => {
         return [1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
     };
     const office = generateOffice({ totalRows, desksPerRow, allocateDesks })(p);
-    assertOccupied(t, office, 5);
+    t.deepEqual(office, [
+        [1, 0, 1, 0, 1],
+        [0, 1, 0, 1, 0]
+    ]);
 });
 
 test('Office is fully occupied', t => {
@@ -38,10 +43,21 @@ test('Office is fully occupied', t => {
         return [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     };
     const office = generateOffice({ totalRows, desksPerRow, allocateDesks })(p);
-    assertOccupied(t, office, 10);
+    t.deepEqual(office, [
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1]
+    ]);
 });
 
-const assertOccupied = (t, office, expectedDesks) => {
-    const occupied = office.reduce((sum, row) => sum + row.filter(desk => desk == deskStatus.occupied).length, 0);
-    t.equal(occupied, expectedDesks);
-};
+test('Ensures that the last row is occupied', t => {
+    t.plan(1);
+    const p = 0.2;
+    const allocateDesks = () => {
+        return [1, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    };
+    const office = generateOffice({ totalRows, desksPerRow, allocateDesks })(p);
+    t.deepEqual(office, [
+        [0, 0, 0, 0, 0],
+        [1, 1, 0, 0, 0]
+    ]);
+});

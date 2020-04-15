@@ -2,7 +2,7 @@ const deskStatus = require('./desk-status');
 const exitRow = 0;
 const offsets = [-1, 1];
 
-module.exports = (office, startCol = 0) => {
+module.exports = office => {
     const findExit = pos => {
         const { row, col } = pos;
         const desk = office[row] && office[row][col];
@@ -14,6 +14,14 @@ module.exports = (office, startCol = 0) => {
         return adjacentDesks.find(findExit);
     };
 
-    const startRow = office.length - 1;
-    return findExit({ row: startRow, col: startCol });
+    const startPos = getStartPos(office);
+    office[startPos.row][startPos.col] = deskStatus.unoccupied;
+    return findExit(startPos);
+};
+
+const getStartPos = office => {
+    const row = office.length - 1;
+    const occupiedCol = office[row].indexOf(deskStatus.occupied);
+    const col = occupiedCol >= 0 ? occupiedCol : 0;
+    return { row, col };
 };
