@@ -1,14 +1,11 @@
 {
     "name": "open-space-ial-distancing",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "author": "Matt Riley",
     "scripts": {
         "test": "tape tests/**/*.js | tap-spec"
     },
-    "author": "Matt Riley",
-    "license": "ISC",
-    "dependencies": {
+    "devDependencies": {
         "tap-spec": "^5.0.0",
         "tape": "^4.13.2"
     }
