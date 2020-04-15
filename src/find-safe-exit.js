@@ -5,10 +5,6 @@ const visited = 2;
 const offsets = [-1, 1];
 
 module.exports = (office, startCol = 0) => {
-    if (!office.length) {
-        throw new Error('Office without desks');
-    }
-
     const findExit = pos => {
         const { row, col } = pos;
         const desk = office[row] && office[row][col];
