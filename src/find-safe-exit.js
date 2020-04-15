@@ -4,9 +4,6 @@ const unoccupied = 0;
 const occupied = 1;
 const visited = 2;
 
-const offsets = [{ row: -1 }, { row: 1 }, { col: -1 }, { col: 1 }];
-const offsetDefaults = { row: 0, col: 0 };
-
 module.exports = (office, startCol = 0) => {
     if (!office.length) {
         throw new Error('Office without desks');
@@ -21,10 +18,17 @@ module.exports = (office, startCol = 0) => {
         if (desk == occupied || desk == visited) return false;
         office[row][col] = visited;
 
-        return offsets.find(offset => {
-            const o = { ...offsetDefaults, ...offset };
-            const nextRow = row + o.row;
-            const nextCol = col + o.col;
+        const surroundings = [row, col].flatMap((num, i) => {
+            return [1, -1].map(offset => {
+                const result = [row, col];
+                result[i] = num + offset;
+                return result;
+            });
+        });
+
+        return surroundings.find(pos => {
+            const nextRow = pos[0];
+            const nextCol = pos[1];
             const nextDesk = office[nextRow] && office[nextRow][nextCol];
             return nextDesk !== undefined ? findExit(nextRow, nextCol) : false;
         });
