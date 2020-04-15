@@ -10,13 +10,6 @@ module.exports = (p, rand) => {
     const unoccupiedDesks = new Array(totalDesks - quota).fill(deskStatus.unoccupied);
     const desks = occupiedDesks.concat(unoccupiedDesks);
     shuffle(desks, rand);
-
-    const office = [];
-
-    for (let i = 0; i < 100; i += 10) {
-        const row = desks.slice(i, i + 10);
-        office.push(row);
-    }
-
-    return office;
+    const chunk = rowIndex => desks.slice(rowIndex * desksPerRow, rowIndex * desksPerRow + desksPerRow);
+    return Array.from({ length: totalRows }, (_, rowIndex) => chunk(rowIndex));
 };
