@@ -18,17 +18,16 @@ module.exports = (office, startCol = 0) => {
         if (desk == occupied || desk == visited) return false;
         office[row][col] = visited;
 
-        const surroundings = [row, col].reduce((acc, num, i) => {
-            [1, -1].forEach(offset => {
+        const surroundings = [row, col].flatMap((num, i) => {
+            return [1, -1].reduce((acc, offset) => {
                 const pos = [row, col];
                 pos[i] = num + offset;
                 const nextRow = pos[0];
                 const nextCol = pos[1];
                 const nextDesk = office[nextRow] && office[nextRow][nextCol];
-                if (nextDesk !== undefined) acc.push(pos);
-            });
-            return acc;
-        }, []);
+                return nextDesk !== undefined ? acc.concat([pos]) : acc;
+            }, []);
+        });
 
         return surroundings.find(pos => findExit(...pos));
     };
