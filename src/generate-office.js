@@ -6,10 +6,9 @@ const totalDesks = totalRows * desksPerRow;
 
 module.exports = (p, rand) => {
     const quota = Math.floor(totalDesks * p);
-    const occupiedDesks = new Array(quota).fill(deskStatus.occupied);
-    const unoccupiedDesks = new Array(totalDesks - quota).fill(deskStatus.unoccupied);
-    const desks = occupiedDesks.concat(unoccupiedDesks);
-    shuffle(desks, rand);
+    const occupied = new Array(quota).fill(deskStatus.occupied);
+    const unoccupied = new Array(totalDesks - quota).fill(deskStatus.unoccupied);
+    const desks = shuffle(occupied.concat(unoccupied), rand);
     const chunk = rowIndex => desks.slice(rowIndex * desksPerRow, rowIndex * desksPerRow + desksPerRow);
     return Array.from({ length: totalRows }, (_, rowIndex) => chunk(rowIndex));
 };
